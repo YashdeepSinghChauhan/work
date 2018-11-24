@@ -1,0 +1,15 @@
+
+    <div class="row">
+    <% @posts.each do |post| %>
+      <div class="col-sm-6 col-md-3">
+        <div class = "panel panel-default">
+          <div class="row"></div>
+          <b>Title:</b> <%= link_to render_with_hashtags(post.title), post %> 
+          <p>
+          <%= render_with_hashtags(post.description.truncate(40))%>...
+          </p>
+</div>
+          
+      </div>
+    <% end %>
+  </div>

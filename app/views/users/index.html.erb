@@ -1,0 +1,11 @@
+<h2 class="current-category2">You're looking for?</h2>
+<%= form_tag(users_path, method: :get, class: "form-inline", role: "search") do %>
+	<%= text_field_tag :term, params[:term], placeholder: "Artists, Authors, People", class: "form-control-search" %>
+		<% end %>
+    <% @users.each do |user| %>
+        <div class = "following-panel">
+           <%= image_tag user.avatar.url, class: 'following-img' %>
+          <%= link_to user.username, user %> 
+        </div>
+          <% end %>
+

@@ -1,0 +1,7 @@
+<h1 class="current-category2">Author Clips</h1>
+    <% @users.each do |user| %>
+        <div class = "following-panel">
+           <%= image_tag user.avatar.url, class: 'following-img' %>
+          <%= link_to user.username, user %> 
+        </div>
+          <% end %>

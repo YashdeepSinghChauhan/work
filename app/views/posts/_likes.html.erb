@@ -1,0 +1,6 @@
+<% if user_signed_in? && current_user.likes?(@post) %>
+    <%= link_to " ", post_like_path(@post), method: :delete, remote: true, class:"fas fa-chevron-down"%>
+<% else %>
+    <%= link_to " ", post_like_path(@post), method: :post, remote: true, class: "fas fa-chevron-up"  %>
+<% end %>
+ <%= @post.likes.count %>

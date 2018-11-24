@@ -1,0 +1,142 @@
+<html>
+<head>
+  <title>WRITEMINATI</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="HandheldFriendly" content="true">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+  <%= csrf_meta_tags %>
+</head>
+<body >
+  <audio src="music.mp3" loop="true" autoplay="true"></audio>
+  <div class="wrapper">
+    <nav>                    
+   
+      <%= link_to image_tag("logo.ico", alt: "logo"), index_posts_url, class: "logo" %>            
+      <div class="menu-icon">
+        <i class="fa fa-bars fa-2x"></i>
+      </div>
+      <div class="menu">
+        <ul>
+          <% Category.all.each do |category| %>
+            <li class="<%= 'active' if params[:category] == category.name %>">
+              <%= link_to category.name, posts_path(category: category.name), class: "link" %>
+            </li>
+          <% end %>
+        </ul>                  
+      </div>
+    </nav>              
+    <div class="navbar2">
+      <% if user_signed_in? %>
+        <ul>
+          <li><%= link_to "", root_path, class: "fas fa-globe-asia fa-2x" %></li>
+          <% if current_user.posts.today.count != 1 %>
+            <li> <%= link_to "", new_post_path, class: "far fa-paper-plane fa-2x" %></li>
+          <% else %>
+            <li><strong>X</strong></li>
+          <% end %>
+          <li> <%= link_to  "" ,user_path(current_user), class: "fas fa-user-astronaut fa-4x" %></li>
+          <li><%= link_to "", destroy_user_session_path, class:"fas fa-door-open fa-4x", method: :delete %></li>
+          <li><%= link_to "", users_path, class: "fas fa-search" %> </li>
+        </ul>
+      <% else %>
+          <ul>
+            <li><%= link_to "", new_user_registration_path, class: "fas fa-user-plus fa-2x" %></li>
+            <li><%= link_to "", new_user_session_path, class: "fas fa-door-closed fa-2x" %></li>
+          </ul>
+      <% end %>                    
+    </div>
+
+
+  
+  
+
+  <div class="container animated fadeInRightBig">
+          <script type="text/javascript">
+
+      // Menu-toggle button
+
+      $(document).ready(function() {
+            $(".menu-icon").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+            });
+      });
+
+      // Scrolling Effect
+
+
+
+      </script>
+      <% if flash.any? %>
+      <script>
+          <% flash.each do |key, value| %>
+              <% type = key.to_s.gsub('alert', 'error').gsub('notice', 'success') %>
+              toastr.<%= type %>('<%= value %>')    
+          <% end %>
+      </script>
+      <script>
+var myVar;
+
+function myFunction() {
+    myVar = setTimeout(showPage, 3000);
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+}
+
+
+
+function setCookie(c_name,value,exdays)
+{
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name)
+{
+    var i,x,y,ARRcookies=document.cookie.split(";");
+    for (i=0;i<ARRcookies.length;i++)
+    {
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name)
+        {
+        return unescape(y);
+        }
+      }
+}
+
+var song = document.getElementsByTagName('audio')[0];
+var played = false;
+var tillPlayed = getCookie('timePlayed');
+function update()
+{
+    if(!played){
+        if(tillPlayed){
+        song.currentTime = tillPlayed;
+        song.play();
+        played = true;
+        }
+        else {
+                song.play();
+                played = true;
+        }
+    }
+
+    else {
+    setCookie('timePlayed', song.currentTime);
+    }
+}
+setInterval(update,1000);
+
+</script>
+      <% end %>
+    <%= yield %>
+  </div>
+</body>

@@ -1,0 +1,29 @@
+<%= simple_form_for @post, html: {multipart: true } do |f| %>
+    <% if @post.errors.any? %>
+    <div id="errors">
+        <h2>
+            <%= pluralize(@post.errors.count, "error") %>
+            Prevented this post from saving
+        </h2>
+        <ul>
+            <% @post.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+        </ul>
+    </div>
+    
+    <% end %>
+    <div class="form-group">
+        <%= select_tag(:category_id, options_for_select(@categories), :prompt => "Select Category") %>
+    </div>
+    <div class="form-group">
+        <%= f.input :title, input_html: { class: 'form-control-title', placeholder: "Give a title" } %><hr>
+    </div>
+    <div class="form-group">
+        <%= f.input :image, input_html: { class: 'far fa-image' } %>
+    </div>
+    <div class="form-group">
+        <%= f.input :description, label: "Story", input_html: {class: 'form-control-description'}, placeholder: "Be expressive." %>
+    </div>
+        <%= f.submit "Publish", class: 'btn btn-danger' %>
+<% end %>
