@@ -1,9 +1,13 @@
-<div id="comment-<%= comment.id %>"> 
-<%= time_ago_in_words(comment.created_at) %> ago.... <br> 
-<%=link_to comment.user.username, comment.user %> <br>
-<%= comment.body %>
-<% if current_user == comment.user || current_user = @post.user %>
-    <%= link_to " ", post_comment_path(@post, comment), method: :delete, remote: true, class: 'fas fa-times', style: 'float: right' %>
-<% end %>
-    <hr>
-</div> 
+<div id="comment-<%= comment.id %>">
+    <div class="comment-image">
+        <%= image_tag comment.user.avatar.url, class: 'img-cir-comment' %>
+    </div>
+    <div class="comment-body">
+        <div class="comment-info">
+        <%= link_to comment.user.username, comment.user %></h5></div>
+        <%= linked_users(comment.body) %>
+    </div>
+    <% if current_user == comment.user || current_user = @post.user %>
+        <%= link_to material_icon.clear, post_comment_path(@post, comment), method: :delete, remote: true, style: 'float: right' %>
+    <% end %>
+</div>

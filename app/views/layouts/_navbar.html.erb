@@ -1,0 +1,21 @@
+ <nav>
+    <div class="nav-wrapper">
+      <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+    </div>
+ </nav>
+<ul id="slide-out" class="sidenav">
+    <li>
+        <div class="user-view">
+            <div class="background">
+                <img src="Pixa/logo4.png">
+              </div>
+            <%= link_to image_tag(current_user.avatar.url), current_user, class: "circle" %>
+            <%= link_to current_user.username, current_user, class:"white-text name" %>
+            <%= link_to current_user.email,current_user, class:"white-text email"%>
+        </div>
+    </li>
+    <li><%= link_to "#{material_icon.notifications} Notifications", notifications_path %><span class="new badge">4</span></li>
+    <li><%= link_to "#{material_icon.people} Profile", main_app.current_user %></li>
+    <li><%= link_to "#{material_icon.settings} Settings", main_app.edit_user_registration_path %></li>
+    <li><%= link_to "#{material_icon.power_settings_new} Log out", main_app.destroy_user_session_path, method: :delete %></li>
+</ul>

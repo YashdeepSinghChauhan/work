@@ -1,65 +1,82 @@
-<div class="panel panel-default">
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-md-4">
-        <% if @post.image.exists? %>
-          <%= image_tag @post.image.url, class: 'img' %>
-        <% else %>
-          NO image 
+<div class="row">
+  <div class="col l1 m3 s12"></div>
+  <div class="col l8 m6 s12">
+    <div class="card">
+      <div class="card-content">
+        <span id="likes"><%= render partial: "likes" %></span>
+        <h2><b><%= @post.title %></b></h2>
+        <span class="date"><%= time_ago_in_words(@post.created_at)%> ago</span>
+        <p>Dear diary,<br>
+         <%= render_with_hashtags(@post.description) %>
+        </p>
+        <% if @post.mentioned_users.any? %>
+          <h4><b>Mentioned Writers</b></h4>
+          <div class="chip">
+            <% @post.mentioned_users.each do |mentioned| %>
+              <%= link_to image_tag(mentioned.avatar.url), mentioned %><%= link_to mentioned.username, mentioned %>
+            <% end %>
+          </div>
         <% end %>
-        <div class="table-responsive">
-          <table class="table">
-            <tbody>
-              <tr>
-                <td><strong>Published at:</strong></td>
-                <td><%= time_ago_in_words(@post.created_at) %> ago </td>
-              </tr>
-              <tr>
-                <td><strong>Category</strong></td>
-                <td><%= @post.category.name %></td>
-              </tr>
-              <tr>
-                <td><strong>Published by</strong></td>
-                <td><%= link_to (@post.user.username), @post.user %></td>
-              </tr>
-              <tr>
-            </tbody>
-          </table>
+       <div class="carousel carousel-slider">
+          <% (0...@post.images.count).each do |image| %>
+            <%= image_tag(@post.thumbnail(image), class: "carousel-item")%>
+          <% end %>
+        </div>
+
+        
+          
+          
+ 
+        <span class="btn-floating halfway-fab waves-effect waves-light red"></span>
+        <br>
+        <span><a class="waves-effect waves-light btn"><%= link_to "Edit", edit_post_path %></a></span>
+        <div class="row">
+          <% if user_signed_in? %>
+            <div class="col s12">
+              <div class="input-field col s12">
+                <%= form_with model: [@post, @comment] do |f| %>
+                  <%= f.text_field :body, placeholder: "Write a comment"  %>
+                  <%= f.submit "Submit" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+          <h4><b>Comments(<%= @post.comments.count %>)</b></h4>
+            <div class="comments">
+               <% @comments.each do |comment| %>
+              <div class="comment">
+                <div id="comment_pane">
+                    <%= render 'comments/comment', comment: comment %>
+                </div>
+              </div>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-8">
-        <i class="far fa-eye"> <%= @post.impressionist_count(:filter=>:session_hash) %></i>
-        <h1 class="review_title"><%= @post.title %></h1>
-        <p><%= render_with_hashtags(@post.description) %></p>
-        <div class="reviews"></div>
-      </div>
     </div>
-  </div>
-  <div class="panel-footer">
-    <div id="likes">
-       <%= render partial: "likes" %> 
-    </div>
-  <% if current_user == @post.user %>
-    <%= link_to ' ', edit_post_path(@post), class: "fas fa-edit" %>   
-    <%= link_to ' ', @post, :method => :delete, :confirm => "Are you sure?", class:"far fa-trash-alt " %>
-  <%end%>
-  <hr>
-    <% if user_signed_in? %>
-      <%= form_with model: [@post, @comment] do |f| %>
-        <div class="form-group">
-          <%= f.text_field :body, class: "form-control", placeholder: "Write your comment" %>
+    <% if @user_posts.posts.count > 1 %>
+      <div class="col l3 m3 s6"><h4><b>Suggested Posts</b></h4>
+        <div class="card">
+          <%= render 'userpost' %>
         </div>
-          <%= f.submit "Comment", class: "btn btn-danger" %>
-      <% end %>
+      </div>
     <% end %>
-  <blockquote>  
-      <% @comments.each do |comment| %>
-      <div id="comment_pane">
-        <%= render 'comments/comment', comment: comment %>
-      <% end %>
-    </div>  
-  </blockquote>    
-</div>
-
-
-
+    
+    <div class="navbar2">
+      <div class="navbarme">
+        <%= link_to image_tag(@post.user.avatar.url, size: "55x55"), @post.user %>
+        <div class="navbardetails">
+          Posted By <%= @post.user.username %><br>
+          <h6>Follow this Writer for more updates!</h6>
+        </div>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+  $('.carousel.carousel-slider').carousel({
+  
+    indicators: true
+  });
+      
+    </script>

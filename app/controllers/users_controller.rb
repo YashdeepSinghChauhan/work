@@ -1,11 +1,15 @@
 class UsersController < ApplicationController
- before_action :authenticate_user!
+ 
+# GET /users
+# GET /users.json
+ respond_to :json
     def show
         @user = User.friendly.find(params[:id])
     end
 
     def following   
         @users = current_user.all_following
+        @user_count = current_user.following_users_count
     end
    
 
@@ -15,6 +19,7 @@ class UsersController < ApplicationController
    		User.where("username LIKE ? OR first_name LIKE ?", "%#{search}%", "%#{search}%")
    	else
    		User.all
-   end  
+   end 
+   
 end
 end

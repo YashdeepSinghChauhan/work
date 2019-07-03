@@ -1,0 +1,76 @@
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-4">
+        <% if @post.image.exists? %>
+          <%= image_tag @post.image.url, class: 'img' %>
+        <% else %>
+          NO image 
+        <% end %>
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td><strong>Published at:</strong></td>
+                <td><%= time_ago_in_words(@post.created_at) %> ago </td>
+              </tr>
+              <tr>
+                <td><strong>Category</strong></td>
+                <td><%= @post.category.name %></td>
+              </tr>
+              <tr>
+                <td><strong>Published by</strong></td>
+                <td><%= link_to (@post.user.username), @post.user %></td>
+              </tr>
+              <tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <i class="far fa-eye"> <%= @post.impressionist_count(:filter=>:session_hash)%></i>
+        <h1 class="review_title"><%= @post.title %></h1>
+        <p class="post_body"><%= render_with_hashtags(@post.description) %></p>
+        <h3 class="mention">Mentioned Authors:</h3>
+        <p class="mentioned_users">
+          <% @post.mentioned_users.each do |user| %>
+            <%= link_to user.username, user %>
+          <% end %>
+        </p>
+        <div class="reviews"></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div id="likes">
+       <%= render partial: "likes" %> 
+    </div>
+  <% if current_user == @post.user %>
+    <%= link_to ' ', edit_post_path(@post), class: "fas fa-edit" %>   
+    <%= link_to ' ', @post, :method => :delete, :confirm => "Are you sure?", class:"far fa-trash-alt " %>
+  <% end %>
+  <hr>
+    <% if user_signed_in? %>
+      <%= form_with model: [@post, @comment] do |f| %>
+        <div class="form-group">
+          <%= f.text_field :body, class: "form-control", placeholder: "Write your comment" %>
+        </div>
+          <%= f.submit "Comment", class: "btn btn-danger" %>
+      <% end %>
+    <% end %>
+  <blockquote>
+     <div id="comment_pane">
+      <% @comments.each do |comment| %>
+        <%= render 'comments/comment', comment: comment %>
+      <% end %>
+    </div>  
+  </blockquote>
+</div>
+ <%= render "userpost"  %>
+ <%= form_tag search_posts_path, method: :get, role: "search" do %>
+<p>
+  <%= text_field_tag :search, params[:search], class: "form-control" %>
+  <%= submit_tag "Search", title: nil, class: "btn btn-default" %>
+</p>
+<% end %>

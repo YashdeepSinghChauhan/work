@@ -1,82 +1,58 @@
-<div class="panel panel-default">
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-md-4">
-        <%= image_tag @user.avatar.url, class: 'img' %>
-        <div class="table-responsive">
-          <table class="table">
-            <tbody>
-              <tr>
-                <td><strong>Author Name :</strong></td>
-                <% if @user.first_name == nil || @user.last_name == nil %>
-                  <% if current_user.id == @user.id %>
-                  <td><%= link_to "Tell your name here", edit_user_registration_path %></td>
-                  <% else %>
-                    <td>Will be provided very soon!</td>
-                  <% end %>
-                <% else %>
-                <td><%= @user.first_name + @user.last_name %> </td>
-                <% end %>
-              </tr>
-              <tr>
-                <td><strong>Pen Name :</strong></td>
-                <td><%= @user.username %></td>
-              </tr>
-              <tr>
-                  <td><strong>Bookmarks :</strong></td>
-                  <% if current_user.id == @user.id %>
-                  <td><%= link_to @user.following_users_count, following_user_path %></td>
-                  <% else %>
-                  <td><%= @user.following_users_count %></td>
-                  <% end %>
-              </tr>
-              <tr>
-                  <td><strong>No of Entries :</strong></td>
-                  <td><%= @user.posts.count %></td>
-                  
-              </tr>
-            </tbody>
-          </table>
-         
-        </div>
-      </div>
-      <div class="col-md-8">
-    <div class="follow">
-      <h1>Following: <%= @user.following_users_count %></h1>
-      <% if current_user.id == @user.id %>
-        <blockquote>Hello <%= @user.username %></blockquote>
-      <% else %>    
-        <%= render 'follows/form', user: @user %>
-      <% end %>
-    </div>
-        
-        <h6><b>About Me</b> :</h6><p> <%= @user.about %></p>
-            <div class="reviews">
-               <% if @user == current_user %>
-            <br><%= link_to "Edit your account", edit_user_registration_path(@user), class: "btn btn-danger" %> <br>
-              <% end %>
-              <br>
-              <% if @user.posts.count == 0%>
-                <p>Share your first experience here, <%= link_to "Write a note",new_post_path %></p>
-              <% else %>
-                <p>Here are <%= @user.username %>'s Entries</p>
-                <div class="transitions-enabled" id="posts2">
-                  <div class="row">
-                    <% @user.posts.each do |post| %>
-                        <div class="col-sm-6 col-md-3">
-                          <div class="thumbnail2">
-                            <%= link_to (image_tag post.image.url, class: 'img'), post %>
-                          </div>
-                        </div>
-                    <% end %>
-                </div>
-              <% end %>  
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-</div>
-
-</div>
+<title>Raaita | <%= @user.username %></title>
+<main>
+	<div class="container">
+		<div class="profile">
+			<div class="profile-image">
+				<%= image_tag(@user.avatar.url) %>
+			</div>
+			<div class="profile-user-settings">
+				<h1 class="profile-user-name"><%= @user.username %></h1>
+				<% if @user.id == current_user.id %>
+					<button class="btn profile-edit-btn"><%= link_to "Edit Profile",edit_user_registration_path(@user) %></button>
+				<% else %>
+					<button class="btn profile-edit-btn"><%= render 'follows/form', user: @user %></button>
+				<% end %>
+			</div>
+			<div class="profile-stats">
+				<ul>
+					<li><span class="profile-stat-count"><%= @user.posts.count %></span> stories</li>
+					<% if @user.id == current_user.id %>
+					<li><span class="profile-stat-count"><%= link_to @user.followers_count, following_user_path %></span>following</li>
+					<% end %>
+					<li><span class="profile-stat-count"><%= @user.followers_count %></span> reading</li>
+				</ul>
+			</div>
+			<div class="profile-bio">
+				<% if @user.first_name == nil && @user.last_name == nil && @user.about == nil %>
+				<% if @user.id == current_user.id %>
+					<p><span class="profile-real-name"><%= link_to "Tell us your info", edit_user_registration_path(@user) %></span>️</p>
+				<% end %>
+				  <p><span class="profile-real-name"><strong>NO info given</strong></span>️</p>
+				<% end %>
+				<% if @user.last_name == nil && @user.about == nil  %>
+					<% if @user.id == current_user.id %>
+				    	<p><span class="profile-real-name"><%= @user.first_name %></span><%= link_to "Tell about yourself", edit_user_registration_path(@user) %>️</p>
+				  	<% end %>
+				  	<p><span class="profile-real-name"><%= @user.first_name %></span><%= @user.about %></p>
+				<% end %>
+				<% if @user.about == nil %>
+          			<p><span class="profile-real-name"><%= @user.first_name%> <%= @user.last_name %></span>️</p>
+        		<% end %>
+        		<% if @user.first_name != nil && @user.last_name != nil && @user.about != nil %>
+          			<p><span class="profile-real-name"><%= @user.first_name%> <%=@user.last_name%></span><%= @user.about %></p>
+        		<% end %>
+			</div>
+		</div>
+	</div>
+	<div class="gallery">
+		<% if @user.posts.count == 0 %>
+			No Stories yet
+		<% else %>
+			<% @user.posts.each do |post| %>
+				<div class="gallery-item">
+					<%= image_tag post.images[0] %> 
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+</main>

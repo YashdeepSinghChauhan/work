@@ -1,15 +1,18 @@
-
-    <div class="row">
-    <% @posts.each do |post| %>
-      <div class="col-sm-6 col-md-3">
-        <div class = "panel panel-default">
-          <div class="row"></div>
-          <b>Title:</b> <%= link_to render_with_hashtags(post.title), post %> 
-          <p>
-          <%= render_with_hashtags(post.description.truncate(40))%>...
-          </p>
-</div>
-          
-      </div>
-    <% end %>
-  </div>
+<div class="transitions-enabled" id="posts">
+  <% @posts.each do |post| %>
+    <div class="box">
+      <h2>
+        <%= link_to post.title, post  %>
+        <%= image_tag post.user.avatar.url, class: 'img-cir-comment' %>
+        <p>
+          <%= post.description.truncate(240) %>
+          <%= link_to 'Read more..', post %>
+          <% Category.all.each do |category| %>
+            <% if post.category_id == category.id %>
+              <p><%= link_to (post.category.name), posts_path(category: category.name) %>
+            <% end %>
+          <% end %>
+        </p>
+      </h2>
+    </div>
+  <% end %>
