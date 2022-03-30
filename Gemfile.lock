@@ -215,7 +215,8 @@ GEM
       os (~> 1.0.0)
       paperclip (>= 5.2.1)
     public_suffix (3.1.0)
-    puma (3.12.1)
+    puma (4.3.12)
+      nio4r (~> 2.0)
     pwa (4.0.5)
       mozaic (~> 2.0)
       railties (~> 5.2)
@@ -370,7 +371,7 @@ DEPENDENCIES
   notifications (~> 0.6.0)
   paperclip (~> 6.1)
   paperclip-compression
-  puma (~> 3.11)
+  puma (~> 4.3)
   pwa
   rails (~> 5.2.3)
   rails_12factor
